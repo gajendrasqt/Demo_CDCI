@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.awesomeproject2",
+  "applicationId": "com.cdci_project",
   "variantName": "release",
   "elements": [
     {
