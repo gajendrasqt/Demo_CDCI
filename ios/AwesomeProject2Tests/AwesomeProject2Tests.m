@@ -5,7 +5,7 @@
 #import <React/RCTRootView.h>
 
 #define TIMEOUT_SECONDS 600
-#define TEXT_TO_LOOK_FOR @"Welcome to CDCI PIPELINE .APK"
+#define TEXT_TO_LOOK_FOR @"Welcome to React"
 
 @interface AwesomeProject2Tests : XCTestCase
 
