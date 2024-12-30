@@ -106,12 +106,12 @@ android {
         }
     }
      //Task to copy the APK to the desired location
-    tasks.register("copyApkToReleaseDir", Copy) {
-        dependsOn "assembleRelease"
-        from("${buildDir}/outputs/apk/release")
-        include("app-release.apk")
-        into("${projectDir}/release")
-    }
+    // tasks.register("copyApkToReleaseDir", Copy) {
+    //     dependsOn "assembleRelease"
+    //     from("${buildDir}/outputs/apk/release")
+    //     include("app-release.apk")
+    //     into("${projectDir}/release")
+    // }
 }
 
 dependencies {
