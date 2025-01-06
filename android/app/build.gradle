@@ -111,6 +111,19 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    // Custom APK Output Path
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def flavorName = variant.productFlavors.isEmpty() ? "" : variant.productFlavors[0]?.name
+            def buildType = variant.buildType.name
+            def apkDir = file("${rootDir}/android/app/custom_apk_directory/${flavorName}/${buildType}")
+            if (!apkDir.exists()) {
+                apkDir.mkdirs()
+            }
+            outputFileName = "app-${flavorName}-${buildType}.apk"
+            outputFile = new File(apkDir, outputFileName)
+        }
+    }
 }
 
 dependencies {
