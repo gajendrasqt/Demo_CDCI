@@ -114,13 +114,13 @@ android {
     // Custom APK Output Path
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            def flavorName = variant.productFlavors.isEmpty() ? "" : variant.productFlavors[0]?.name
-            def buildType = variant.buildType.name
-            def apkDir = file("${rootDir}/android/app/custom_apk_directory/${flavorName}/${buildType}")
+            // def flavorName = variant.productFlavors.isEmpty() ? "" : variant.productFlavors[0]?.name
+            // def buildType = variant.buildType.name
+            def apkDir = file("${rootDir}/android/app/custom_apk_directory/White_label_1/app-release")
             if (!apkDir.exists()) {
                 apkDir.mkdirs()
             }
-            outputFileName = "app-${flavorName}-${buildType}.apk"
+            outputFileName = "app-release.apk"
             outputFile = new File(apkDir, outputFileName)
         }
     }
