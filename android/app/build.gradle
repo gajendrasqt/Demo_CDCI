@@ -111,17 +111,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    // Custom APK Output Path
-   android {
-    // other configurations...
-
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            output.outputFileName = "${variant.name}.apk"
-        }
-    }
-}
-
 }
 
 dependencies {
