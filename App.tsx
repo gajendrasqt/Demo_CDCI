@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  NativeModules,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -24,13 +25,21 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Config from 'react-native-config';
+import deviceInfoModule from 'react-native-device-info';
 
+const {BuildConfig, AppConfig} = NativeModules;
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
 function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  console.log('sasasa----=', deviceInfoModule.getApplicationName());
+
+  // const appFlavor = BuildConfig.FLAVOR;
+
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -40,7 +49,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
             color: isDarkMode ? Colors.white : Colors.black,
           },
         ]}>
-        {title}
+        {title} {Config.APP_NAME}
       </Text>
       <Text
         style={[
@@ -71,24 +80,17 @@ function App(): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> CICD Pipeline.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <Text>
+            App Name:{' '}
+            <Text style={{fontWeight: 'bold'}}>
+              {deviceInfoModule.getApplicationName()}
+            </Text>
+          </Text>
+          <Text style={styles.highlight}>App.tsx</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
