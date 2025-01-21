@@ -44,7 +44,7 @@ android {
             keyPassword '123456'
         }
         release {
-            storeFile file('../../keyStore/appRelease.jks')  // Make sure the correct path is provided
+            storeFile file('..')  // Make sure the correct path is provided
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
