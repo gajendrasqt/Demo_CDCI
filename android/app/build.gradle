@@ -66,7 +66,7 @@ android {
             versionCode 101
             versionName "1.0.1"
             resValue "string", "app_name", "App-1"
-            buildConfigField "String", "ENVFILE", "\".env.app1\"" // Link .env.app1
+            // buildConfigField "String", "ENVFILE", "\".env.app1\"" // Link .env.app1
             signingConfig signingConfigs.app1 
         }
         App2 {
@@ -75,7 +75,7 @@ android {
             versionCode 102
             versionName "1.0.2"
             resValue "string", "app_name", "App-2"
-            buildConfigField "String", "ENVFILE", "\".env.app2\"" // Link .env.app2
+            // buildConfigField "String", "ENVFILE", "\".env.app2\"" // Link .env.app2
             signingConfig signingConfigs.app2
         }
     }
