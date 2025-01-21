@@ -15,7 +15,7 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 def loadEnv(appName) {
-    def envFile = file("../../.env")
+    def envFile = file("../..")
     def envProps = new Properties()
     envFile.withInputStream { stream -> envProps.load(stream) }
     return envProps.findAll { it.key.toString().startsWith("${appName.toUpperCase()}_") }
@@ -90,17 +90,9 @@ android {
         //     proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         // }
          release {
-            // Dynamically apply the selected app's signing configs
-            def appName = project.hasProperty('appName') ? project.appName : 'App1'
-            def envConfig = loadEnv(appName)
-            signingConfig signingConfigs.create("${appName.toLowerCase()}") {
-                storeFile file(envConfig["${appName.toUpperCase()}_KEYSTORE"])
-                storePassword envConfig["${appName.toUpperCase()}_KEYSTORE_PASSWORD"]
-                keyAlias envConfig["${appName.toUpperCase()}_KEY_ALIAS"]
-                keyPassword envConfig["${appName.toUpperCase()}_KEY_PASSWORD"]
-            }
-            buildConfigField "String", "API_URL", "\"${envConfig["${appName.toUpperCase()}_API_URL"]}\""
-            resValue "string", "app_name", envConfig["${appName.toUpperCase()}_NAME"]
+            signingConfig signingConfigs.dynamicSigningConfig
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 }
