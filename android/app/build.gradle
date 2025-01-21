@@ -15,7 +15,7 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 def loadEnv(appName) {
-    def envFile = file("../.env")
+    def envFile = file("../../.env")
     def envProps = new Properties()
     envFile.withInputStream { stream -> envProps.load(stream) }
     return envProps.findAll { it.key.toString().startsWith("${appName.toUpperCase()}_") }
