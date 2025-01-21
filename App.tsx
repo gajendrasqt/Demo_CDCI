@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Image,
   NativeModules,
   SafeAreaView,
   ScrollView,
@@ -90,6 +91,13 @@ function App(): React.JSX.Element {
               {deviceInfoModule.getApplicationName()}
             </Text>
           </Text>
+          <Image
+            source={{
+              uri: 'https://avsar.s3.ap-south-1.amazonaws.com/qa_new_avsar/uploads/item-images/thumbnails/1628243427item-imagehs1460-48-49.jpg',
+            }}
+            height={200}
+            width={200}
+          />
           <Text style={styles.highlight}>App.tsx</Text>
         </View>
       </ScrollView>

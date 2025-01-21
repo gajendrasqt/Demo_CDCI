@@ -1,15 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-
-def getEnvValue(String key, String defaultValue) {
-    def envProps = new Properties()
-    def envFile = rootProject.file(".env")
-    if (envFile.exists()) {
-        envFile.withInputStream { stream -> envProps.load(stream) }
-    }
-    return envProps.getProperty(key, defaultValue)
-}
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 // Configuration for React Native
 react {
@@ -39,17 +31,31 @@ android {
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
-            storePassword '123456'
-            keyAlias 'key0'
-            keyPassword '123456'
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
         release {
-            storeFile file('..')  // Make sure the correct path is provided
+            storeFile file('../../keyStore/demo.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
         }
     }
+    //  signingConfigs {
+    //     app1 {
+    //         storeFile file('../../keyStore/app1.jks')
+    //         storePassword 'app1Password'
+    //         keyAlias 'app1Alias'
+    //         keyPassword 'app1KeyPassword'
+    //     }
+    //     app2 {
+    //         storeFile file('../../keyStore/app2.jks')
+    //         storePassword 'app2Password'
+    //         keyAlias 'app2Alias'
+    //         keyPassword 'app2KeyPassword'
+    //     }
+    // }
 
     // Define product flavors for white-label apps
     flavorDimensions += "branding"
@@ -60,10 +66,8 @@ android {
             versionCode 101
             versionName "1.0.1"
             resValue "string", "app_name", "App-1"
-
-            // Optional: Read API_URL from .env or fallback to default
-            def apiUrl = getEnvValue("API_URL", "https://default.api.com")
-            buildConfigField "String", "API_URL", "\"${apiUrl}\""
+            buildConfigField "String", "ENVFILE", "\".env.app1\"" // Link .env.app1
+            // signingConfig signingConfigs.app1 
         }
         App2 {
             dimension "branding"
@@ -71,10 +75,8 @@ android {
             versionCode 102
             versionName "1.0.2"
             resValue "string", "app_name", "App-2"
-
-            // Optional: Read API_URL from .env or fallback to default
-            def apiUrl = getEnvValue("API_URL", "https://default.api.com")
-            buildConfigField "String", "API_URL", "\"${apiUrl}\""
+            buildConfigField "String", "ENVFILE", "\".env.app2\"" // Link .env.app2
+            // signingConfig signingConfigs.app2
         }
     }
 
@@ -83,7 +85,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.release  // Make sure this points to the correct signing config
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
