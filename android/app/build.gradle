@@ -1,7 +1,15 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
+def getEnvValue(String key, String defaultValue) {
+    def envProps = new Properties()
+    def envFile = rootProject.file(".env")
+    if (envFile.exists()) {
+        envFile.withInputStream { stream -> envProps.load(stream) }
+    }
+    return envProps.getProperty(key, defaultValue)
+}
 
 // Configuration for React Native
 react {
@@ -14,12 +22,6 @@ def enableProguardInReleaseBuilds = false
 // Preferred JavaScriptCore (JSC) flavor
 def jscFlavor = 'org.webkit:android-jsc:+'
 
-def loadEnv(appName) {
-    def envFile = file("../..")
-    def envProps = new Properties()
-    envFile.withInputStream { stream -> envProps.load(stream) }
-    return envProps.findAll { it.key.toString().startsWith("${appName.toUpperCase()}_") }
-}
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -34,49 +36,45 @@ android {
         multiDexEnabled true
     }
 
-    // signingConfigs {
-    //     debug {
-    //         storeFile file('debug.keystore')
-    //         storePassword 'android'
-    //         keyAlias 'androiddebugkey'
-    //         keyPassword 'android'
-    //     }
-    //     release {
-    //         storeFile file('../../keyStore/demo.jks')
-    //         storePassword '123456'
-    //         keyAlias 'key0'
-    //         keyPassword '123456'
-    //     }
-    // }
-     signingConfigs {
-        app1 {
-            storeFile file('../../keyStore/app1.jks')
-            storePassword 'app1Password'
-            keyAlias 'app1Alias'
-            keyPassword 'app1KeyPassword'
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
         }
-        app2 {
-            storeFile file('../../keyStore/app2.jks')
-            storePassword 'app2Password'
-            keyAlias 'app2Alias'
-            keyPassword 'app2KeyPassword'
+        release {
+            storeFile file('../../keyStore/appRelease.jks')  // Make sure the correct path is provided
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
         }
     }
 
     // Define product flavors for white-label apps
     flavorDimensions += "branding"
     productFlavors {
-         App1 {
+        App1 {
             dimension "branding"
             applicationIdSuffix ".app1"
             versionCode 101
             versionName "1.0.1"
+            resValue "string", "app_name", "App-1"
+
+            // Optional: Read API_URL from .env or fallback to default
+            def apiUrl = getEnvValue("API_URL", "https://default.api.com")
+            buildConfigField "String", "API_URL", "\"${apiUrl}\""
         }
         App2 {
             dimension "branding"
             applicationIdSuffix ".app2"
             versionCode 102
             versionName "1.0.2"
+            resValue "string", "app_name", "App-2"
+
+            // Optional: Read API_URL from .env or fallback to default
+            def apiUrl = getEnvValue("API_URL", "https://default.api.com")
+            buildConfigField "String", "API_URL", "\"${apiUrl}\""
         }
     }
 
@@ -84,15 +82,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
         }
-        // release {
-        //     signingConfig signingConfigs.release
-        //     minifyEnabled enableProguardInReleaseBuilds
-        //     proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        // }
-         release {
-            signingConfig signingConfigs.dynamicSigningConfig
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        release {
+            signingConfig signingConfigs.release  // Make sure this points to the correct signing config
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 }
